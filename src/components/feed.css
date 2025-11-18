@@ -1,3 +1,6 @@
+/* ===============================
+   BASE LAYOUT: FEED CONTAINER
+=============================== */
 .feed-container {
   width: 100vw;
   height: 100vh;                 /* full viewport height */
@@ -6,11 +9,41 @@
   background-color: #f0f0f0;
 }
 
-/* Wrapper ensures card is centered vertically */
+/* Each section contains ONE feed item or the bio card */
 .feed-wrapper {
-  height: 100vh;                 /* full viewport height for snap */
+  height: 100vh;
   display: flex;
-  justify-content: center;       /* vertical centering */
-  align-items: center;           /* horizontal centering */
-  scroll-snap-align: start;      /* snap at top of wrapper */
+  align-items: center;      /* still horizontally centered */
+  justify-content: flex-start;   /* push toward top */
+  padding-bottom: 30%;    /* adjust this for how far down you want them */
+  box-sizing: border-box;
+  scroll-snap-align: start;
+}
+
+
+
+/* ===============================
+   MOBILE FIXES
+=============================== */
+
+/* Fixes mobile browser chrome shrinking viewport */
+@media (max-width: 768px) {
+  .feed-container,
+  .feed-wrapper {
+    height: 100dvh;              /* “dynamic” viewport height */
+    min-height: 100dvh;
+  }
+
+  /* Better mobile centering */
+  .feed-wrapper {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+/* Tiny screens need a little breathing room */
+@media (max-width: 480px) {
+  .feed-wrapper {
+    padding: 10px 0;
+  }
 }

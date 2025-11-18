@@ -2,7 +2,7 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  padding: 20px 0;
+  padding: 10px 0;
   position: sticky;
   top: 0;
   z-index: 20;
@@ -14,9 +14,26 @@
   height: auto;
   cursor: pointer;
 }
+/* ---------- MOBILE FIXES ---------- */
 @media (max-width: 768px) {
-  .logo-container {
-    transform: scale(0.7);
-    margin-top: 5px;
+  .logo-wrapper {
+    padding: 8px 0;            /* reduce vertical space */
+    background-color: #f0f0f0; /* keep your style */
+  }
+
+  .logo-img {
+    width: 80px;  /* much smaller on mobile */
+    height: auto;
+  }
+}
+
+/* Even smaller for tiny phones (optional) */
+@media (max-width: 480px) {
+  .logo-img {
+    width: 100px;
+  }
+
+  .logo-wrapper {
+    padding: 5px 0;
   }
 }

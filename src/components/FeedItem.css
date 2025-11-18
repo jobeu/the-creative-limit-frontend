@@ -45,17 +45,6 @@
   transform: scale(1.05);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .feed-item {
-    width: 90%;
-    padding: 20px;
-  }
-
-  .cover-image {
-    max-height: 200px;
-  }
-}
 /* Wrapper to center arrows under image */
 .feeditem-image-wrapper {
   display: flex;
@@ -77,14 +66,13 @@
   height: 42px;
   border-radius: 50%;
   border: none;
-  background: white;          /* circle background */
-  color: black;               /* arrow color */
+  background: white;
+  color: black;
   font-size: 20px;
   font-weight: bold;
   cursor: pointer;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.18);
 
-  /* Center the arrow perfectly */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -96,6 +84,7 @@
   transform: scale(1.1);
   background-color: #f7f7f7;
 }
+
 .see-more-wrapper {
   margin-top: 20px;
   text-align: center;
@@ -113,4 +102,57 @@
 
 .see-more-button:hover {
   background-color: #555;
+}
+
+
+/* =======================================================
+   MOBILE ONLY FIXES — NO VISUAL CHANGES TO DESKTOP
+======================================================= */
+
+@media (max-width: 768px) {
+  /* Card shrinks a bit, better for portrait */
+  .feed-item {
+    width: 90%;
+    padding: 20px;
+    margin: 20px auto;
+  }
+
+  .feed-item h1 {
+    font-size: 1.4rem;
+  }
+
+  .feed-item p {
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  .cover-image {
+    max-height: 220px;
+  }
+
+  .feeditem-arrow {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+
+  .see-more-button {
+    font-size: 0.9rem;
+    padding: 10px 16px;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 480px) {
+  .feed-item {
+    padding: 16px;
+  }
+
+  .feed-item h1 {
+    font-size: 1.2rem;
+  }
+
+  .feed-item p {
+    font-size: 0.9rem;
+  }
 }
