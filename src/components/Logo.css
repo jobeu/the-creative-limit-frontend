@@ -14,3 +14,9 @@
   height: auto;
   cursor: pointer;
 }
+@media (max-width: 768px) {
+  .logo-container {
+    transform: scale(0.7);
+    margin-top: 5px;
+  }
+}
