@@ -1,0 +1,16 @@
+.feed-container {
+  width: 100vw;
+  height: 100vh;                 /* full viewport height */
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  background-color: #f0f0f0;
+}
+
+/* Wrapper ensures card is centered vertically */
+.feed-wrapper {
+  height: 100vh;                 /* full viewport height for snap */
+  display: flex;
+  justify-content: center;       /* vertical centering */
+  align-items: center;           /* horizontal centering */
+  scroll-snap-align: start;      /* snap at top of wrapper */
+}

@@ -1,0 +1,16 @@
+.logo-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background-color: #f0f0f0;
+}
+
+.logo-img {
+  width: 200px;
+  height: auto;
+  cursor: pointer;
+}
