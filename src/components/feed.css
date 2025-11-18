@@ -37,7 +37,7 @@
   /* Better mobile centering */
   .feed-wrapper {
     padding-top: 0;
-    padding-bottom: 0;
+    padding-bottom: 10%;
   }
 }
 
