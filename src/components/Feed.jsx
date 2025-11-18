@@ -2,26 +2,30 @@ import React, { useState, useEffect, useRef } from "react";
 import FeedItem from "./FeedItem";
 import "./feed.css";
 
+// Utility to pick the best image from various formats
 function pickBestImageUrl(cover) {
   if (!cover) return null;
+
   if (cover.formats) {
     if (cover.formats.large?.url) return cover.formats.large.url;
     if (cover.formats.medium?.url) return cover.formats.medium.url;
     if (cover.formats.small?.url) return cover.formats.small.url;
     if (cover.formats.thumbnail?.url) return cover.formats.thumbnail.url;
   }
+
   if (cover.url) return cover.url;
-  if (cover.data?.attributes?.url) return cover.data?.attributes?.url;
+  if (cover.data?.attributes?.url) return cover.data.attributes.url;
   if (Array.isArray(cover.data) && cover.data[0]?.attributes?.url)
-    return cover.data[0]?.attributes?.url;
+    return cover.data[0].attributes.url;
+
   return null;
 }
 
 export default function Feed({ bio, items, onImageClick }) {
-  const [visibleCount, setVisibleCount] = useState(10); // show first 10 initially
+  const [visibleCount, setVisibleCount] = useState(10); // initially show first 10 items
   const feedRef = useRef(null);
 
-  // Normalize bio
+  // Normalize bio content
   const normalizedBio = bio
     ? {
         title: bio.Title || "Bio",
@@ -38,16 +42,13 @@ export default function Feed({ bio, items, onImageClick }) {
       }
     : null;
 
-  // Endless scroll
+  // Endless scroll: load more items as user scrolls
   useEffect(() => {
     const handleScroll = () => {
       if (!feedRef.current) return;
       const { scrollTop, clientHeight, scrollHeight } = feedRef.current;
       if (scrollTop + clientHeight >= scrollHeight - 50) {
-        // near bottom
-        setVisibleCount((prev) =>
-          Math.min(prev + 10, items.length)
-        );
+        setVisibleCount((prev) => Math.min(prev + 10, items.length));
       }
     };
 

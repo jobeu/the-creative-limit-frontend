@@ -9,63 +9,60 @@ import "./Home.css";
 export default function Home() {
   const [showSplash, setShowSplash] = useState(true);
   const [splashVideo, setSplashVideo] = useState(null);
-  const [feedItems, setFeedItems] = useState([]);
-  const [bioPost, setBioPost] = useState(null);
+  const [feedItems, setFeedItems] = useState({ bio: null, projectsFeed: [] });
 
-  // Modal state
   const [modalOpen, setModalOpen] = useState(false);
   const [modalImages, setModalImages] = useState([]);
   const [modalIndex, setModalIndex] = useState(0);
   const [modalTitle, setModalTitle] = useState("");
   const [modalDescription, setModalDescription] = useState("");
 
+  // ---------- Lock body during splash/loading ----------
+  useEffect(() => {
+    if (showSplash) {
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100vw';
+      document.body.style.height = '100dvh';
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.height = '';
+      document.body.style.overflow = '';
+    }
+  }, [showSplash]);
+
+  // ---------- Load content ----------
   useEffect(() => {
     async function loadContent() {
       try {
         const allProjects = await getProjects();
         const bio = await getBioPost();
+        if (!allProjects) return;
 
-        setBioPost(bio);
+        setFeedItems((prev) => ({ ...prev, bio }));
 
-        if (!allProjects || allProjects.length === 0) return;
-
-        // -------- SPLASH SELECTION ----------
+        // Splash video
         const splashItem = allProjects.find((p) => p.Slug === "logo-video");
-        let splashUrl = null;
-
-        if (splashItem?.Collection?.length > 0) {
-          splashUrl = splashItem.Collection[0].url;
-        } else if (splashItem?.Cover?.url) {
-          splashUrl = splashItem.Cover.url;
-        }
-
+        let splashUrl = splashItem?.Collection?.[0]?.url || splashItem?.Cover?.url || null;
         setSplashVideo(splashUrl);
 
-        // -------- TRANSFORM PROJECTS ----------
+        // Transform projects
         const projectsFeed = allProjects
           .filter((p) => p.Slug !== "logo-video")
           .map((p) => {
-            let description = "";
-
-            if (Array.isArray(p.Description)) {
-              description = p.Description
-                .map((block) =>
-                  block.children.map((c) => c.text).join("")
-                )
-                .join("\n");
-            }
-
-            let images = [];
-            if (p.Cover?.url) images.push(p.Cover.url);
-            if (p.Collection?.length > 0) {
-              images.push(...p.Collection.map((m) => m.url));
-            }
-
+            const description = Array.isArray(p.Description)
+              ? p.Description.map((b) => b.children.map((c) => c.text).join("")).join("\n")
+              : "";
+            const images = [
+              ...(p.Cover?.url ? [p.Cover.url] : []),
+              ...(p.Collection?.map((m) => m.url) || []),
+            ];
             return {
               title: p.Title || "No Title",
               description: description || "No description available",
               images,
-              URL: p.URL || null, // <-- add the URL field
+              URL: p.URL || null,
             };
           });
 
@@ -74,19 +71,12 @@ export default function Home() {
         console.error("Error loading content:", err);
       }
     }
-
     loadContent();
   }, []);
 
-  // ---------- FAILSAFE: ALWAYS EXIT SPLASH ----------
-  useEffect(() => {
-    const timer = setTimeout(() => setShowSplash(false), 3000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  // ---------- MODAL HELPERS ----------
+  // ---------- Modal helpers ----------
   const openModal = (item, index = 0) => {
-    if (!item.images || item.images.length === 0) return;
+    if (!item.images?.length) return;
     setModalImages(item.images);
     setModalIndex(index);
     setModalTitle(item.title);
@@ -102,43 +92,44 @@ export default function Home() {
   const prevImage = () =>
     setModalIndex((prev) => (prev - 1 + modalImages.length) % modalImages.length);
 
-  // ---------- SPLASH SCREEN ----------
-  if (showSplash) {
-    return splashVideo ? (
-      <Splash videoUrl={splashVideo} onFinish={() => setShowSplash(false)} />
-    ) : (
-      <div className="loading-screen">
-        <span className="loading-wipe">Loading...</span>
-      </div>
-    );
-  }
-
-  // ---------- MAIN CONTENT ----------
+  // ---------- Render ----------
   return (
-    <div className="feed-container">
-      <Logo />
-
-      {feedItems.projectsFeed && feedItems.bio ? (
-        <Feed
-          bio={feedItems.bio}
-          items={feedItems.projectsFeed}
-          onImageClick={openModal}
-        />
+    <div className="app-wrapper">
+      {showSplash ? (
+        splashVideo ? (
+          <Splash videoUrl={splashVideo} onFinish={() => setShowSplash(false)} />
+        ) : (
+          <div className="loading-screen">
+            <span className="loading-wipe">Loading...</span>
+          </div>
+        )
       ) : (
-        <div className="loading-screen">
-          <span className="loading-wipe">Loading content...</span>
-        </div>
-      )}
+        <>
+          <Logo className="logo-fixed" />
 
-      {modalOpen && (
-        <ImageModal
-          src={modalImages[modalIndex]}
-          title={modalTitle}
-          description={modalDescription}
-          onClose={closeModal}
-          onNext={nextImage}
-          onPrev={prevImage}
-        />
+          {feedItems.projectsFeed.length && feedItems.bio ? (
+            <Feed
+              bio={feedItems.bio}
+              items={feedItems.projectsFeed}
+              onImageClick={openModal}
+            />
+          ) : (
+            <div className="loading-screen">
+              <span className="loading-wipe">Loading content...</span>
+            </div>
+          )}
+
+          {modalOpen && (
+            <ImageModal
+              src={modalImages[modalIndex]}
+              title={modalTitle}
+              description={modalDescription}
+              onClose={closeModal}
+              onNext={nextImage}
+              onPrev={prevImage}
+            />
+          )}
+        </>
       )}
     </div>
   );

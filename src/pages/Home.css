@@ -1,25 +1,12 @@
-/* Full-height snap container */
-.feed-container {
-  width: 100vw;
-  overflow-y: scroll;
-  scroll-snap-type: y mandatory;
-}
-
-/* Each snap section */
-.feed-wrapper {
-  scroll-snap-align: start;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
-
-/* Bio section */
+/* ============================================================
+   BIO SECTION
+============================================================ */
 .bio-section {
   position: relative;
   padding: 40px;
   width: 70%;
   max-width: 800px;
+
   display: flex;
   flex-direction: column;
 }
@@ -28,6 +15,7 @@
   position: absolute;
   top: 20px;
   right: 20px;
+
   width: 150px;
   height: 150px;
   object-fit: cover;
@@ -40,12 +28,14 @@
 }
 
 .bio-content p {
-  text-align: left;
   margin-top: 20px;
+  text-align: left;
   line-height: 1.6;
 }
 
-/* Scroll hint text */
+/* ============================================================
+   SCROLL INDICATOR
+============================================================ */
 .scroll-down {
   margin-top: 40px;
   text-align: center;
@@ -59,30 +49,35 @@
   50% { opacity: 1; }
 }
 
-/* Loading screen */
+/* ============================================================
+   LOADING SCREEN
+   Fixed and locked to viewport for iOS to prevent bounce
+============================================================ */
 .loading-screen {
+  position: fixed;       /* lock to viewport */
+  top: 0;
+  left: 0;
   width: 100vw;
-  height: 100vh;
-
+  height: 100vh;         /* vh works reliably for initial load */
   display: flex;
   justify-content: center;
   align-items: center;
-
   font-size: 1.5rem;
   color: #eee;
   background-color: #000;
+  z-index: 9999;         /* above everything else */
 }
 
 .loading-wipe {
   position: relative;
   display: inline-block;
   overflow: hidden;
+
   color: #eee;
   font-weight: 300;
-  padding: 0 20px;   /* ← add horizontal spacing */
+  padding: 0 20px;
 }
 
-/* Horizontal wipe animation */
 .loading-wipe::after {
   content: "";
   position: absolute;
@@ -101,20 +96,58 @@
   animation: wipe 1s linear infinite;
 }
 
-/* Swipe left → right */
 @keyframes wipe {
   from { left: -100%; }
   to { left: 100%; }
 }
 
-/* ===========================
-   HIDE SCROLLBARS BUT KEEP SCROLLING
-   =========================== */
-.feed-container {
-  -ms-overflow-style: none;  /* IE 10+ */
-  scrollbar-width: none;     /* Firefox */
+/* ============================================================
+   SPLASH VIDEO
+   Covers full viewport with no scroll
+============================================================ */
+.splash-container {
+  position: fixed;      /* fix to viewport */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #333;
+  z-index: 9998;        /* just below loading screen if still visible */
 }
 
-.feed-container::-webkit-scrollbar {
-  display: none;             /* Chrome, Safari, Opera */
+.splash-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ============================================================
+   OPTIONAL: MOBILE FIXES FOR BIO / FEED
+============================================================ */
+@media (max-width: 768px) {
+  .bio-section {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .bio-image {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .bio-section {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .bio-image {
+    width: 100px;
+    height: 100px;
+  }
 }

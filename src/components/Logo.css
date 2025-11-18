@@ -3,7 +3,7 @@
   display: flex;
   justify-content: center;
   padding: 10px 0;
-  position: sticky;
+  position: absolute;
   top: 0;
   z-index: 20;
   background-color: #f0f0f0;
@@ -19,6 +19,7 @@
   .logo-wrapper {
     padding: 8px 0;            /* reduce vertical space */
     background-color: #f0f0f0; /* keep your style */
+    touch-action: none;
   }
 
   .logo-img {

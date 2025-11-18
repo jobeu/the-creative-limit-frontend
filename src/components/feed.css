@@ -1,49 +1,59 @@
-/* ===============================
-   BASE LAYOUT: FEED CONTAINER
-=============================== */
+/* ============================================================
+   FEED CONTAINER (SCROLL + SNAP)
+============================================================ */
 .feed-container {
   width: 100vw;
-  height: 100vh;                 /* full viewport height */
-  overflow-y: scroll;
+  height: 100dvh;                  /* full viewport height */
+  overflow-y: auto;               /* enable scrolling inside feed */
   scroll-snap-type: y mandatory;
   background-color: #f0f0f0;
+
+  /* Hide scrollbars but allow scrolling */
+  -ms-overflow-style: none;       /* IE 10+ */
+  scrollbar-width: none;          /* Firefox */
+  -webkit-overflow-scrolling: touch; /* smooth mobile scrolling */
+  overscroll-behavior: contain;   /* prevent scroll escaping on mobile */
+  touch-action: pan-y;
 }
 
-/* Each section contains ONE feed item or the bio card */
+.feed-container::-webkit-scrollbar {
+  display: none;                  /* Chrome, Safari, Opera */
+}
+
+
+/* ============================================================
+   FEED WRAPPER — one screen section
+============================================================ */
 .feed-wrapper {
   height: 100vh;
-  display: flex;
-  align-items: center;      /* still horizontally centered */
-  justify-content: flex-start;   /* push toward top */
-  padding-bottom: 30%;    /* adjust this for how far down you want them */
-  box-sizing: border-box;
   scroll-snap-align: start;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  box-sizing: border-box;
+  padding-bottom: 30%;            /* spacing for visual layout */
 }
 
 
-
-/* ===============================
-   MOBILE FIXES
-=============================== */
-
-/* Fixes mobile browser chrome shrinking viewport */
+/* ============================================================
+   MOBILE FIXES (100dvh + spacing)
+============================================================ */
 @media (max-width: 768px) {
   .feed-container,
   .feed-wrapper {
-    height: 100dvh;              /* “dynamic” viewport height */
+    height: 100dvh;               /* dynamic viewport height */
     min-height: 100dvh;
   }
 
-  /* Better mobile centering */
   .feed-wrapper {
-    padding-top: 0;
-    padding-bottom: 10%;
+    padding-bottom: 10%;           /* smaller padding for mobile */
   }
 }
 
-/* Tiny screens need a little breathing room */
 @media (max-width: 480px) {
   .feed-wrapper {
-    padding: 10px 0;
+    padding: 10px 0;               /* extra breathing room for tiny screens */
   }
 }

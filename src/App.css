@@ -1,47 +1,83 @@
-/* Reset and global styles */
+/* ============================================================
+   GLOBAL BASE STYLES
+============================================================ */
 html, body, #root {
-  height: 100%;
+  width: 100vw;
+  height: 100dvh;                 /* dynamic viewport height for mobile */
   margin: 0;
   padding: 0;
+  overflow: hidden;               /* lock global scroll */
+  font-family: sans-serif;
+  background-color: #f0f0f0;
+  color: #333;
+  scroll-behavior: smooth;
+}
+body.splash-active {
+  position: fixed;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
 }
 
 * {
   box-sizing: border-box;
 }
 
-body {
-  font-family: sans-serif;
-  background-color: #f0f0f0; /* light grey background */
-  color: #333;
-  scroll-behavior: smooth;
-}
-
-/* Scroll container for feed */
-.feed-container {
+/* ============================================================
+   MAIN APP WRAPPER
+   Locks everything in place; scroll only happens inside feed
+============================================================ */
+.app-wrapper {
   width: 100vw;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  overflow-y: scroll;
-  scroll-snap-type: y mandatory;
-  padding: 40px 0; /* top/bottom padding to create gaps */
+  height: 100dvh;
+  overflow: hidden;              /* no global scroll */
+  position: relative;
 }
 
-/* Each feed item is a card */
+/* ============================================================
+   FEED CONTAINER
+   Vertical scroll allowed only here
+============================================================ */
+.feed-container {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;                   /* vertical scroll inside feed only */
+  -webkit-overflow-scrolling: touch;  /* smooth momentum scrolling on iOS */
+  overscroll-behavior: contain;       /* trap scroll inside this element */
+  scroll-snap-type: y mandatory;
+}
+
+/* Hide scrollbars but allow scrolling */
+.feed-container::-webkit-scrollbar {
+  display: none;
+}
+.feed-container {
+  -ms-overflow-style: none;   /* IE 10+ */
+  scrollbar-width: none;      /* Firefox */
+}
+
+
+/* ============================================================
+   FEED ITEM CARD
+============================================================ */
 .feed-item {
-  width: 90%; /* card width relative to viewport */
+  width: 90%;
   max-width: 800px;
-  margin: 40px auto; /* center horizontally and vertical spacing */
-  min-height: 80vh; /* taller than viewport to create big gap effect */
+  margin: 40px auto;
+
+  min-height: 80vh;
+
   background-color: #fff;
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-  scroll-snap-align: start;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+
   padding: 30px;
+
   transition: transform 0.3s ease;
 }
 
@@ -49,7 +85,6 @@ body {
   transform: translateY(-5px);
 }
 
-/* Feed text */
 .feed-item h1 {
   font-size: 2rem;
   margin-bottom: 1rem;
@@ -62,7 +97,9 @@ body {
   max-width: 100%;
 }
 
-/* Images container */
+/* ============================================================
+   FEED ITEM IMAGE GRID
+============================================================ */
 .feed-item .images {
   display: flex;
   flex-wrap: wrap;
