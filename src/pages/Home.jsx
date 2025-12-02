@@ -9,7 +9,11 @@ import "./Home.css";
 export default function Home() {
   const [showSplash, setShowSplash] = useState(true);
   const [splashVideo, setSplashVideo] = useState(null);
-  const [feedItems, setFeedItems] = useState({ bio: null, projectsFeed: [] });
+
+  const [feedItems, setFeedItems] = useState({
+    bio: null,
+    projectsFeed: [],
+  });
 
   const [modalOpen, setModalOpen] = useState(false);
   const [modalImages, setModalImages] = useState([]);
@@ -17,18 +21,18 @@ export default function Home() {
   const [modalTitle, setModalTitle] = useState("");
   const [modalDescription, setModalDescription] = useState("");
 
-  // ---------- Lock body during splash/loading ----------
+  // ---------- Lock body during splash ----------
   useEffect(() => {
     if (showSplash) {
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100vw';
-      document.body.style.height = '100dvh';
-      document.body.style.overflow = 'hidden';
+      document.body.style.position = "fixed";
+      document.body.style.width = "100vw";
+      document.body.style.height = "100dvh";
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.style.height = '';
-      document.body.style.overflow = '';
+      document.body.style.position = "";
+      document.body.style.width = "";
+      document.body.style.height = "";
+      document.body.style.overflow = "";
     }
   }, [showSplash]);
 
@@ -36,41 +40,77 @@ export default function Home() {
   useEffect(() => {
     async function loadContent() {
       try {
+        // Fetch all projects
         const allProjects = await getProjects();
+
+        // Fetch the new bio from assets
         const bio = await getBioPost();
-        if (!allProjects) return;
 
-        setFeedItems((prev) => ({ ...prev, bio }));
+        // --------- DEBUG LOG ----------
+        console.log("DEBUG Home.jsx: bio received from getBioPost():", bio);
 
-        // Splash video
-        const splashItem = allProjects.find((p) => p.Slug === "logo-video");
-        let splashUrl = splashItem?.Collection?.[0]?.url || splashItem?.Cover?.url || null;
+        // ---------- Transform BIO from ASSETS ----------
+        let bioItem = null;
+        if (bio) {
+          const description = Array.isArray(bio.Text_Content)
+            ? bio.Text_Content.map((block) =>
+                block.children.map((c) => c.text).join("")
+              ).join("\n")
+            : "";
+
+          bioItem = {
+            title: bio.Display_Title || bio.Title || "Bio",
+            description,
+            images: bio.Cover?.url ? [bio.Cover.url] : [],
+            URL: null,
+            isBio: true,
+          };
+
+          console.log("DEBUG Home.jsx: bioItem after transformation:", bioItem);
+        }
+
+        // ---------- Find splash video project ----------
+        const splashItem = allProjects?.find((p) => p.Slug === "logo-video");
+        const splashUrl =
+          splashItem?.Collection?.[0]?.url || splashItem?.Cover?.url || null;
         setSplashVideo(splashUrl);
 
-        // Transform projects
+        // ---------- Transform normal projects ----------
         const projectsFeed = allProjects
           .filter((p) => p.Slug !== "logo-video")
           .map((p) => {
             const description = Array.isArray(p.Description)
-              ? p.Description.map((b) => b.children.map((c) => c.text).join("")).join("\n")
+              ? p.Description.map((b) =>
+                  b.children.map((c) => c.text).join("")
+                ).join("\n")
               : "";
+
             const images = [
               ...(p.Cover?.url ? [p.Cover.url] : []),
               ...(p.Collection?.map((m) => m.url) || []),
             ];
+
             return {
               title: p.Title || "No Title",
-              description: description || "No description available",
+              description: description || "",
               images,
               URL: p.URL || null,
             };
           });
 
-        setFeedItems({ bio, projectsFeed });
+        // ---------- Prepend bioItem to projectsFeed if it exists ----------
+        const finalFeed = bioItem ? [bioItem, ...projectsFeed] : projectsFeed;
+
+        // ---------- Set state ----------
+        setFeedItems({
+          bio: bioItem,
+          projectsFeed: finalFeed,
+        });
       } catch (err) {
         console.error("Error loading content:", err);
       }
     }
+
     loadContent();
   }, []);
 
@@ -107,9 +147,9 @@ export default function Home() {
         <>
           <Logo className="logo-fixed" />
 
-          {feedItems.projectsFeed.length && feedItems.bio ? (
+          {feedItems.projectsFeed.length ? (
             <Feed
-              bio={feedItems.bio}
+              bio={feedItems.bio} // can still pass separately if Feed wants it
               items={feedItems.projectsFeed}
               onImageClick={openModal}
             />

@@ -21,26 +21,9 @@ function pickBestImageUrl(cover) {
   return null;
 }
 
-export default function Feed({ bio, items, onImageClick }) {
-  const [visibleCount, setVisibleCount] = useState(10); // initially show first 10 items
+export default function Feed({ items, onImageClick }) {
+  const [visibleCount, setVisibleCount] = useState(10);
   const feedRef = useRef(null);
-
-  // Normalize bio content
-  const normalizedBio = bio
-    ? {
-        title: bio.Title || "Bio",
-        description: Array.isArray(bio.Description)
-          ? bio.Description.map((block) =>
-              block.children.map((c) => c.text).join("")
-            ).join("\n")
-          : bio.Description || "No bio available.",
-        images: (() => {
-          const url = pickBestImageUrl(bio.CoverImage);
-          return url ? [url] : [];
-        })(),
-        isBio: true,
-      }
-    : null;
 
   // Endless scroll: load more items as user scrolls
   useEffect(() => {
@@ -59,12 +42,6 @@ export default function Feed({ bio, items, onImageClick }) {
 
   return (
     <div className="feed-container" ref={feedRef}>
-      {normalizedBio && (
-        <div className="feed-wrapper feed-item-bio">
-          <FeedItem item={normalizedBio} onImageClick={onImageClick} />
-        </div>
-      )}
-
       {items.slice(0, visibleCount).map((item, index) => (
         <div key={index} className="feed-wrapper">
           <FeedItem item={item} onImageClick={onImageClick} />

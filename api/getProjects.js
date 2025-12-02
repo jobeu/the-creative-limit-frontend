@@ -9,50 +9,19 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Fetch all projects
+    // Fetch all projects only
     const projectsResponse = await fetch(
       `${STRAPI_URL}/api/projects?populate=*&sort=updatedAt:desc`,
-      {
-        headers: {
-          Authorization: `Bearer ${STRAPI_KEY}`,
-        },
-      }
+      { headers: { Authorization: `Bearer ${STRAPI_KEY}` } }
     );
-
-    if (!projectsResponse.ok) {
-      throw new Error(`Failed to fetch projects from Strapi: ${projectsResponse.status}`);
-    }
-
     const projectsData = await projectsResponse.json();
 
-    // Fetch blogposts to find the Bio post
-    const blogResponse = await fetch(`${STRAPI_URL}/api/blogposts?populate=*`, {
-      headers: {
-        Authorization: `Bearer ${STRAPI_KEY}`,
-      },
-    });
-
-    if (!blogResponse.ok) {
-      throw new Error(`Failed to fetch blogposts from Strapi: ${blogResponse.status}`);
-    }
-
-    const blogData = await blogResponse.json();
-    const bioItemRaw = blogData.data.find(post => post.Title === "Bio") || null;
-
-    const bioItem = bioItemRaw
-      ? {
-          Title: bioItemRaw.Title,
-          Description: bioItemRaw.Content,
-          CoverImage: bioItemRaw.Cover_image,
-        }
-      : null;
-
-    // Return combined data
+    // Return only projects
     res.status(200).json({
       data: projectsData.data || [],
-      bio: bioItem,
     });
   } catch (error) {
+    console.error("Error in getProjects:", error);
     res.status(500).json({ error: error.message });
   }
 }

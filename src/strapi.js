@@ -14,24 +14,22 @@ export const getProjects = async () => {
   }
 };
 
-// Fetch the Bio post from the serverless function
+// Fetch the Bio post via the dedicated serverless function
 export const getBioPost = async () => {
   try {
-    const response = await fetch("/api/getProjects"); // same endpoint
+    const response = await fetch("/api/getBioPost");
     const data = await response.json();
 
-    // Bio post is in data.bio
-    if (!data.bio) return null;
+    if (!data || !data.bio) return null;
 
-    const bioItem = {
-      Title: data.bio.Title,
-      Description: data.bio.Description,
-      CoverImage: data.bio.CoverImage,
+    return {
+      Title: data.bio.Title || null,
+      Display_Title: data.bio.Display_Title || null,
+      Text_Content: data.bio.Text_Content || null,
+      Cover: data.bio.Cover || null,
     };
-
-    return bioItem;
   } catch (error) {
-    console.error("Error fetching bio post:", error);
+    console.error("strapi.js ERROR - fetching bio post:", error);
     return null;
   }
 };
