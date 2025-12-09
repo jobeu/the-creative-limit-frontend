@@ -9,11 +9,14 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Fetch all projects only
+    // Fetch all projects sorted by Order (ascending)
     const projectsResponse = await fetch(
-      `${STRAPI_URL}/api/projects?populate=*&sort=updatedAt:desc`,
-      { headers: { Authorization: `Bearer ${STRAPI_KEY}` } }
+      `${STRAPI_URL}/api/projects?populate=*&sort=Order:asc`,
+      {
+        headers: { Authorization: `Bearer ${STRAPI_KEY}` },
+      }
     );
+
     const projectsData = await projectsResponse.json();
 
     // Return only projects
