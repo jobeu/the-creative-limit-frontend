@@ -1,78 +1,203 @@
 /* ============================================================
-   BIO SECTION
+   FEED CONTAINER (SCROLL + SNAP)
 ============================================================ */
-.bio-section {
-  position: relative;
-  padding: 40px;
-  width: 70%;
-  max-width: 800px;
+.feed-container {
+  width: 100vw;
+  height: 100dvh; 
+  overflow-y: auto; 
+  scroll-snap-type: y mandatory;
+  background-color: #f0f0f0;
+  -ms-overflow-style: none; 
+  scrollbar-width: none; 
+  -webkit-overflow-scrolling: touch; 
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+}
 
+.feed-container::-webkit-scrollbar {
+  display: none; 
+}
+
+.feed-wrapper {
+  height: 100vh;
+  scroll-snap-align: start;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  padding-bottom: 30%;
+}
+
+/* ============================================================
+   BIO SECTION (HERO CIRCLE IMAGE)
+============================================================ */
+.bio-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.bio-section {
+  display: flex;
+  flex-direction: column;   
+  align-items: center;      
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;       
 }
 
 .bio-image {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-
   width: 150px;
   height: 150px;
   object-fit: cover;
   border-radius: 50%;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  display: block;          
 }
 
-.bio-content h1 {
-  margin: 0;
-  text-align: left;
+.bio-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #111;
 }
 
-.bio-content p {
-  margin-top: 20px;
-  text-align: left;
+.bio-text {
+  font-size: 1rem;
   line-height: 1.6;
+  color: #333;
+  max-width: 500px;
 }
 
 /* ============================================================
-   SCROLL INDICATOR
+   FEED ITEMS
 ============================================================ */
-.scroll-down {
-  margin-top: 40px;
-  text-align: center;
-  font-weight: bold;
-  animation: fadeInOut 2s infinite;
+.feed-item {
+  width: 70%;
+  max-width: 600px;
+  background-color: #fff;
   color: #333;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 30px;
+  box-sizing: border-box;
+  transition: transform 0.3s ease;
+  margin: 40px auto;
 }
 
-@keyframes fadeInOut {
-  0%, 100% { opacity: 0; }
-  50% { opacity: 1; }
+.feed-item:hover {
+  transform: translateY(-5px);
+}
+
+.feed-item h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.feed-item p {
+  font-size: 1.2rem;
+  text-align: center;
+  max-width: 100%;
+}
+
+.cover-image {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  margin-top: 20px;
+}
+
+.cover-image:hover {
+  transform: scale(1.05);
+}
+
+.feeditem-image-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.feeditem-nav {
+  margin-top: 12px;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.feeditem-arrow {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: white;
+  color: black;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.feeditem-arrow:hover {
+  transform: scale(1.1);
+  background-color: #f7f7f7;
+}
+
+.see-more-wrapper {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.see-more-button {
+  padding: 10px 20px;
+  background-color: #333;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.see-more-button:hover {
+  background-color: #555;
 }
 
 /* ============================================================
    LOADING SCREEN
-   Fixed and locked to viewport for iOS to prevent bounce
 ============================================================ */
 .loading-screen {
-  position: fixed;       /* lock to viewport */
+  position: fixed;       
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;         /* vh works reliably for initial load */
+  height: 100vh;         
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 1.5rem;
   color: #eee;
   background-color: #000;
-  z-index: 9999;         /* above everything else */
+  z-index: 9999;        
 }
 
 .loading-wipe {
   position: relative;
   display: inline-block;
   overflow: hidden;
-
   color: #eee;
   font-weight: 300;
   padding: 0 20px;
@@ -85,14 +210,12 @@
   left: -100%;
   width: 100%;
   height: 100%;
-
   background: linear-gradient(
     90deg,
     transparent 0%,
     rgba(255, 255, 255, 0.55) 50%,
     transparent 100%
   );
-
   animation: wipe 1s linear infinite;
 }
 
@@ -103,10 +226,9 @@
 
 /* ============================================================
    SPLASH VIDEO
-   Covers full viewport with no scroll
 ============================================================ */
 .splash-container {
-  position: fixed;      /* fix to viewport */
+  position: fixed;      
   top: 0;
   left: 0;
   width: 100%;
@@ -116,7 +238,7 @@
   align-items: center;
   justify-content: center;
   background-color: #333;
-  z-index: 9998;        /* just below loading screen if still visible */
+  z-index: 9998;        
 }
 
 .splash-video {
@@ -126,24 +248,74 @@
 }
 
 /* ============================================================
-   OPTIONAL: MOBILE FIXES FOR BIO / FEED
+   MOBILE FIXES
 ============================================================ */
 @media (max-width: 768px) {
-  .bio-section {
+  .feed-wrapper {
+    padding-bottom: 10%;
+  }
+
+  .feed-item {
     width: 90%;
     padding: 20px;
+    margin: 0 auto;
+    justify-content: center;
+  }
+
+  .feed-item h1 {
+    font-size: 1.4rem;
+  }
+
+  .feed-item p {
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  .cover-image {
+    max-height: 220px;
+  }
+
+  .feeditem-arrow {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+
+  .see-more-button {
+    font-size: 0.9rem;
+    padding: 10px 16px;
   }
 
   .bio-image {
     width: 120px;
     height: 120px;
   }
+
+  .bio-title {
+    font-size: 1.5rem;
+  }
+
+  .bio-text {
+    font-size: 0.9rem;
+    max-width: 90%;
+  }
 }
 
 @media (max-width: 480px) {
-  .bio-section {
-    width: 100%;
-    padding: 10px;
+  .feed-wrapper {
+    padding: 10px 0;
+  }
+
+  .feed-item {
+    padding: 16px;
+  }
+
+  .feed-item h1 {
+    font-size: 1.2rem;
+  }
+
+  .feed-item p {
+    font-size: 0.9rem;
   }
 
   .bio-image {

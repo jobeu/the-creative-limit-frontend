@@ -99,7 +99,7 @@ export default function Home() {
           });
 
         // ---------- Prepend bioItem to projectsFeed if it exists ----------
-        const finalFeed = bioItem ? [bioItem, ...projectsFeed] : projectsFeed;
+        const finalFeed = projectsFeed;
 
         // ---------- Set state ----------
         setFeedItems({

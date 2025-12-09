@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import FeedItem from "./FeedItem";
-import "./feed.css";
 
 // Utility to pick the best image from various formats
 function pickBestImageUrl(cover) {
@@ -21,7 +20,7 @@ function pickBestImageUrl(cover) {
   return null;
 }
 
-export default function Feed({ items, onImageClick }) {
+export default function Feed({ bio, items, onImageClick }) {
   const [visibleCount, setVisibleCount] = useState(10);
   const feedRef = useRef(null);
 
@@ -42,6 +41,24 @@ export default function Feed({ items, onImageClick }) {
 
   return (
     <div className="feed-container" ref={feedRef}>
+      {/* --- Bio Section --- */}
+      {bio && (
+        <div className="feed-wrapper bio-wrapper">
+          <div className="bio-section">
+            {bio.images[0] && (
+              <img
+                className="bio-image"
+                src={pickBestImageUrl(bio.images[0]) || bio.images[0]}
+                alt={bio.title}
+              />
+            )}
+            <h2 className="bio-title">{bio.title}</h2>
+            <p className="bio-text">{bio.description}</p>
+          </div>
+        </div>
+      )}
+
+      {/* --- Project Feed Items --- */}
       {items.slice(0, visibleCount).map((item, index) => (
         <div key={index} className="feed-wrapper">
           <FeedItem item={item} onImageClick={onImageClick} />
