@@ -21,8 +21,31 @@ function pickBestImageUrl(cover) {
 }
 
 export default function Feed({ bio, items, onImageClick }) {
-  const [visibleCount, setVisibleCount] = useState(10);
+  const [visibleCount, setVisibleCount] = useState(5);
   const feedRef = useRef(null);
+
+  // -------------------------
+  // Internal bio animation state
+  // -------------------------
+  const [bioVisible, setBioVisible] = useState({
+    cover: false,
+    title: false,
+    text: false,
+  });
+
+  // Trigger bio fade-in on mount
+  useEffect(() => {
+    if (!bio) return;
+
+    const timers = [
+      setTimeout(() => setBioVisible((v) => ({ ...v, cover: true })), 200),
+      setTimeout(() => setBioVisible((v) => ({ ...v, title: true })), 600),
+      setTimeout(() => setBioVisible((v) => ({ ...v, text: true })), 1000),
+    ];
+
+    // Cleanup in case component unmounts early
+    return () => timers.forEach(clearTimeout);
+  }, [bio]);
 
   // Endless scroll: load more items as user scrolls
   useEffect(() => {
@@ -30,7 +53,7 @@ export default function Feed({ bio, items, onImageClick }) {
       if (!feedRef.current) return;
       const { scrollTop, clientHeight, scrollHeight } = feedRef.current;
       if (scrollTop + clientHeight >= scrollHeight - 50) {
-        setVisibleCount((prev) => Math.min(prev + 10, items.length));
+        setVisibleCount((prev) => Math.min(prev + 5, items.length));
       }
     };
 
@@ -47,13 +70,17 @@ export default function Feed({ bio, items, onImageClick }) {
           <div className="bio-section">
             {bio.images[0] && (
               <img
-                className="bio-image"
+                className={`bio-image bio-fade ${bioVisible.cover ? "visible delay-1" : ""}`}
                 src={pickBestImageUrl(bio.images[0]) || bio.images[0]}
                 alt={bio.title}
               />
             )}
-            <h2 className="bio-title">{bio.title}</h2>
-            <p className="bio-text">{bio.description}</p>
+            <h2 className={`bio-title bio-fade ${bioVisible.title ? "visible delay-2" : ""}`}>
+              {bio.title}
+            </h2>
+            <p className={`bio-text bio-fade ${bioVisible.text ? "visible delay-2" : ""}`}>
+              {bio.description}
+            </p>
           </div>
         </div>
       )}

@@ -3,7 +3,7 @@ import Splash from "../components/Splash";
 import Feed from "../components/Feed";
 import ImageModal from "../components/ImageModal";
 import Logo from "../components/Logo";
-import { getProjects, getBioPost } from "../strapi";
+import { getProjects, getBioPost, getSplashVideo } from "../strapi";
 import "./Home.css";
 
 export default function Home() {
@@ -46,9 +46,6 @@ export default function Home() {
         // Fetch the new bio from assets
         const bio = await getBioPost();
 
-        // --------- DEBUG LOG ----------
-        console.log("DEBUG Home.jsx: bio received from getBioPost():", bio);
-
         // ---------- Transform BIO from ASSETS ----------
         let bioItem = null;
         if (bio) {
@@ -66,18 +63,16 @@ export default function Home() {
             isBio: true,
           };
 
-          console.log("DEBUG Home.jsx: bioItem after transformation:", bioItem);
         }
 
-        // ---------- Find splash video project ----------
-        const splashItem = allProjects?.find((p) => p.Slug === "logo-video");
-        const splashUrl =
-          splashItem?.Collection?.[0]?.url || splashItem?.Cover?.url || null;
+        // ---------- Load splash video from Assets ----------
+        const splash = await getSplashVideo();
+        const splashUrl = splash?.Cover?.url || null;
         setSplashVideo(splashUrl);
+
 
         // ---------- Transform normal projects ----------
         const projectsFeed = allProjects
-          .filter((p) => p.Slug !== "logo-video")
           .map((p) => {
             const description = Array.isArray(p.Description)
               ? p.Description.map((b) =>

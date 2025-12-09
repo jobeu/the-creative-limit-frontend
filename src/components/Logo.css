@@ -1,40 +1,37 @@
+/* Centered container */
 .logo-wrapper {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  padding: 10px 0;
-  position: absolute;
-  top: 0;
-  z-index: 20;
-  background-color: #f0f0f0;
+  position: fixed;             /* adjust for vertical position */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
 }
 
+.logo-link {
+  display: inline-block;
+}
+
+/* Placeholder matches final size */
+.logo-placeholder {
+  width: 140px;          /* <-- adjust size here */
+  height: 140px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Logo image */
 .logo-img {
-  width: 200px;
-  height: auto;
-  cursor: pointer;
-}
-/* ---------- MOBILE FIXES ---------- */
-@media (max-width: 768px) {
-  .logo-wrapper {
-    padding: 8px 0;            /* reduce vertical space */
-    background-color: #f0f0f0; /* keep your style */
-    touch-action: none;
-  }
-
-  .logo-img {
-    width: 80px;  /* much smaller on mobile */
-    height: auto;
-  }
+  width: 140px;          /* <-- match placeholder */
+  height: 140px;
+  object-fit: contain;
+  display: block;
 }
 
-/* Even smaller for tiny phones (optional) */
-@media (max-width: 480px) {
-  .logo-img {
-    width: 100px;
-  }
+/* Fade states */
+.logo-invisible {
+  opacity: 0;
+}
 
-  .logo-wrapper {
-    padding: 5px 0;
-  }
+.logo-fade-in {
+  opacity: 1;
+  transition: opacity 0.6s ease-in-out;
 }

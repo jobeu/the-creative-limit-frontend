@@ -319,7 +319,29 @@
   }
 
   .bio-image {
-    width: 100px;
-    height: 100px;
+    width: 200px;
+    height: 200px;
   }
+}
+/* ============================================================
+   BIO FADE-IN SEQUENCE
+============================================================ */
+.bio-fade {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.bio-fade.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Optional subtle delay class if you want stagger via CSS */
+.delay-1 {
+  transition-delay: 0.2s;
+}
+
+.delay-2 {
+  transition-delay: 0.4s;
 }
