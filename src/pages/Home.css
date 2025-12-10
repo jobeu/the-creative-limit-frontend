@@ -378,3 +378,27 @@ body.splash-active {
 .delay-2 {
   transition-delay: 0.4s;
 }
+/* ============================================================
+   BIO SOCIAL ICONS
+============================================================ */
+.bio-social {
+  display: flex;
+  gap: 12px;          /* space between icons */
+  margin-top: 8px;    /* spacing under the title */
+  justify-content: center;
+  align-items: center;
+}
+
+.bio-social img {
+  width: 32px;        /* uniform width */
+  height: 32px;       /* uniform height */
+  object-fit: contain;
+  display: block;
+  filter: grayscale(100%); /* optional greyscale */
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.bio-social img:hover {
+  filter: grayscale(0%);   /* optional hover effect */
+  transform: scale(1.1);   /* subtle scale on hover */
+}

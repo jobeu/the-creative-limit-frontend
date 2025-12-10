@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import FeedItem from "./FeedItem";
+import LinkedInIcon from "../assets/linkedin.svg"; // <-- added
+import InstagramIcon from "../assets/instagram.svg"; // <-- added
 
 // Utility to pick the best image from various formats
 function pickBestImageUrl(cover) {
@@ -24,16 +26,12 @@ export default function Feed({ bio, items, onImageClick }) {
   const [visibleCount, setVisibleCount] = useState(5);
   const feedRef = useRef(null);
 
-  // -------------------------
-  // Internal bio animation state
-  // -------------------------
   const [bioVisible, setBioVisible] = useState({
     cover: false,
     title: false,
     text: false,
   });
 
-  // Trigger bio fade-in on mount
   useEffect(() => {
     if (!bio) return;
 
@@ -43,11 +41,9 @@ export default function Feed({ bio, items, onImageClick }) {
       setTimeout(() => setBioVisible((v) => ({ ...v, text: true })), 1000),
     ];
 
-    // Cleanup in case component unmounts early
     return () => timers.forEach(clearTimeout);
   }, [bio]);
 
-  // Endless scroll: load more items as user scrolls
   useEffect(() => {
     const handleScroll = () => {
       if (!feedRef.current) return;
@@ -78,6 +74,17 @@ export default function Feed({ bio, items, onImageClick }) {
             <h2 className={`bio-title bio-fade ${bioVisible.title ? "visible delay-2" : ""}`}>
               {bio.title}
             </h2>
+
+            {/* --- Social Icons --- */}
+            <div className={`bio-social bio-fade ${bioVisible.title ? "visible delay-2" : ""}`}>
+              <a href="https://www.linkedin.com/in/jobe-ulshafer-986152166?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" target="_blank" rel="noopener noreferrer">
+                <img src={LinkedInIcon} alt="LinkedIn" />
+              </a>
+              <a href="https://www.instagram.com/jobe.wallace" target="_blank" rel="noopener noreferrer">
+                <img src={InstagramIcon} alt="Instagram" />
+              </a>
+            </div>
+
             <p className={`bio-text bio-fade ${bioVisible.text ? "visible delay-2" : ""}`}>
               {bio.description}
             </p>
