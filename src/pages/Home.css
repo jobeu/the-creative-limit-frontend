@@ -1,35 +1,55 @@
 /* ============================================================
-   FEED CONTAINER (SCROLL + SNAP)
+   GLOBAL RESET + VIEWPORT LOCK
 ============================================================ */
-.feed-container {
-  width: 100vw;
-  height: 100dvh; 
-  overflow-y: auto; 
-  scroll-snap-type: y mandatory;
-  background-color: #f0f0f0;
-  -ms-overflow-style: none; 
-  scrollbar-width: none; 
-  -webkit-overflow-scrolling: touch; 
-  overscroll-behavior: contain;
-  touch-action: pan-y;
-}
-
-.feed-container::-webkit-scrollbar {
-  display: none; 
-}
-
-.feed-wrapper {
-  height: 100vh;
-  scroll-snap-align: start;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box;
-  padding-bottom: 30%;
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;              /* Disable page scrolling */
+  overscroll-behavior-y: none;   /* Prevent iOS rubber band */
+  background: #f0f0f0;
+  -webkit-overflow-scrolling: auto;
 }
 
 /* ============================================================
-   BIO SECTION (HERO CIRCLE IMAGE)
+   FEED CONTAINER (THE ONLY SCROLLER)
+============================================================ */
+.feed-container {
+  width: 100%;
+  height: 100dvh;               /* Correct viewport height on iOS */
+  overflow-y: auto;             /* Our ONLY scrollable area */
+  scroll-snap-type: y mandatory;
+  background-color: #f0f0f0;
+
+  /* Scrollbar hiding */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overscroll-behavior: none;    /* Prevent rubber-band */
+  -webkit-overflow-scrolling: touch;
+}
+
+.feed-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* ============================================================
+   FEED WRAPPER (ONE SNAP PAGE)
+============================================================ */
+.feed-wrapper {
+  min-height: 100dvh;           /* EXACT device viewport height */
+  scroll-snap-align: start;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  box-sizing: border-box;
+  padding: 0;                   /* Remove the 30% gap that caused bounce */
+}
+
+/* ============================================================
+   BIO SECTION
 ============================================================ */
 .bio-wrapper {
   display: flex;
@@ -39,23 +59,22 @@
 
 .bio-section {
   display: flex;
-  flex-direction: column;   
-  align-items: center;      
+  flex-direction: column;
+  align-items: center;
   text-align: center;
+
   max-width: 600px;
   margin: 0 auto;
   padding: 0;
-  position: relative;       
 }
 
 .bio-image {
   width: 150px;
   height: 150px;
-  object-fit: cover;
   border-radius: 50%;
+  object-fit: cover;
   margin-bottom: 1.5rem;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  display: block;          
 }
 
 .bio-title {
@@ -68,8 +87,8 @@
 .bio-text {
   font-size: 1rem;
   line-height: 1.6;
-  color: #333;
   max-width: 500px;
+  color: #333;
 }
 
 /* ============================================================
@@ -80,16 +99,19 @@
   max-width: 600px;
   background-color: #fff;
   color: #333;
+
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+
   padding: 30px;
   box-sizing: border-box;
-  transition: transform 0.3s ease;
   margin: 40px auto;
+
+  transition: transform 0.3s ease;
 }
 
 .feed-item:hover {
@@ -108,14 +130,17 @@
   max-width: 100%;
 }
 
+/* ============================================================
+   FEED IMAGES + NAV
+============================================================ */
 .cover-image {
   width: 100%;
   max-height: 300px;
-  object-fit: cover;
   border-radius: 12px;
+  object-fit: cover;
   cursor: pointer;
-  transition: transform 0.2s ease;
   margin-top: 20px;
+  transition: transform 0.2s ease;
 }
 
 .cover-image:hover {
@@ -131,24 +156,26 @@
 .feeditem-nav {
   margin-top: 12px;
   display: flex;
-  gap: 20px;
   justify-content: center;
+  gap: 20px;
 }
 
 .feeditem-arrow {
   width: 42px;
   height: 42px;
-  border-radius: 50%;
   border: none;
-  background: white;
-  color: black;
+  border-radius: 50%;
+  background: #fff;
+  color: #000;
   font-size: 20px;
   font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.18);
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(0,0,0,0.18);
   transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
@@ -157,6 +184,9 @@
   background-color: #f7f7f7;
 }
 
+/* ============================================================
+   SEE MORE LINK
+============================================================ */
 .see-more-wrapper {
   margin-top: 20px;
   text-align: center;
@@ -165,7 +195,7 @@
 .see-more-button {
   padding: 10px 20px;
   background-color: #333;
-  color: white;
+  color: #fff;
   border-radius: 8px;
   text-decoration: none;
   font-weight: bold;
@@ -180,41 +210,41 @@
    LOADING SCREEN
 ============================================================ */
 .loading-screen {
-  position: fixed;       
-  top: 0;
-  left: 0;
+  position: fixed;
+  inset: 0;
   width: 100vw;
-  height: 100vh;         
+  height: 100vh;
+
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.5rem;
-  color: #eee;
+
   background-color: #000;
-  z-index: 9999;        
+  color: #eee;
+  font-size: 1.5rem;
+
+  z-index: 9999;
 }
 
 .loading-wipe {
   position: relative;
   display: inline-block;
   overflow: hidden;
+  padding: 0 20px;
   color: #eee;
   font-weight: 300;
-  padding: 0 20px;
 }
 
 .loading-wipe::after {
   content: "";
   position: absolute;
-  top: 0;
-  left: -100%;
+  inset: 0 auto 0 -100%;
   width: 100%;
-  height: 100%;
   background: linear-gradient(
     90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.55) 50%,
-    transparent 100%
+    transparent,
+    rgba(255,255,255,0.55),
+    transparent
   );
   animation: wipe 1s linear infinite;
 }
@@ -228,17 +258,14 @@
    SPLASH VIDEO
 ============================================================ */
 .splash-container {
-  position: fixed;      
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
+  position: fixed;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #333;
-  z-index: 9998;        
+  background: #333;
+  overflow: hidden;
+  z-index: 9998;
 }
 
 .splash-video {
@@ -251,29 +278,15 @@
    MOBILE FIXES
 ============================================================ */
 @media (max-width: 768px) {
-  .feed-wrapper {
-    padding-bottom: 10%;
-  }
-
   .feed-item {
     width: 90%;
     padding: 20px;
-    margin: 0 auto;
-    justify-content: center;
   }
 
-  .feed-item h1 {
-    font-size: 1.4rem;
-  }
+  .feed-item h1 { font-size: 1.4rem; }
+  .feed-item p  { font-size: 1rem; }
 
-  .feed-item p {
-    font-size: 1rem;
-    line-height: 1.4;
-  }
-
-  .cover-image {
-    max-height: 220px;
-  }
+  .cover-image { max-height: 220px; }
 
   .feeditem-arrow {
     width: 36px;
@@ -286,45 +299,21 @@
     padding: 10px 16px;
   }
 
-  .bio-image {
-    width: 120px;
-    height: 120px;
-  }
-
-  .bio-title {
-    font-size: 1.5rem;
-  }
-
-  .bio-text {
-    font-size: 0.9rem;
-    max-width: 90%;
-  }
+  .bio-image { width: 120px; height: 120px; }
+  .bio-title { font-size: 1.5rem; }
+  .bio-text  { font-size: 0.9rem; max-width: 90%; }
 }
 
 @media (max-width: 480px) {
-  .feed-wrapper {
-    padding: 10px 0;
-  }
+  .feed-item { padding: 16px; }
+  .feed-item h1 { font-size: 1.2rem; }
+  .feed-item p  { font-size: 0.9rem; }
 
-  .feed-item {
-    padding: 16px;
-  }
-
-  .feed-item h1 {
-    font-size: 1.2rem;
-  }
-
-  .feed-item p {
-    font-size: 0.9rem;
-  }
-
-  .bio-image {
-    width: 200px;
-    height: 200px;
-  }
+  .bio-image { width: 200px; height: 200px; }
 }
+
 /* ============================================================
-   BIO FADE-IN SEQUENCE
+   BIO FADE-IN
 ============================================================ */
 .bio-fade {
   opacity: 0;
@@ -337,11 +326,5 @@
   transform: translateY(0);
 }
 
-/* Optional subtle delay class if you want stagger via CSS */
-.delay-1 {
-  transition-delay: 0.2s;
-}
-
-.delay-2 {
-  transition-delay: 0.4s;
-}
+.delay-1 { transition-delay: 0.2s; }
+.delay-2 { transition-delay: 0.4s; }

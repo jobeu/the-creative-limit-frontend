@@ -1,10 +1,12 @@
 /* Centered container */
 .logo-wrapper {
-  position: fixed;             /* adjust for vertical position */
+  position: fixed;
+  top: 0%;        /* <--- move logo higher or lower by adjusting this */
   left: 50%;
   transform: translateX(-50%);
   z-index: 999;
 }
+
 
 .logo-link {
   display: inline-block;
