@@ -50,7 +50,7 @@ export default function FeedItem({ item, onImageClick }) {
             rel="noopener noreferrer"
             className="see-more-button"
           >
-            See More
+            See Project
           </a>
         </div>
       )}
